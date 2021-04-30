@@ -3,11 +3,11 @@ import { BadRequest } from '../utils/Errors'
 
 class BugsService {
   async find(query = {}) {
-    return await dbContext.Bugs.find(query) // NOTE .populate('creator', 'name, etc')
+    return await dbContext.Bugs.find(query).populate('creator', 'name picture')
   }
 
   async findOne(id) {
-    const data = await dbContext.Bugs.findOne({ _id: id })
+    const data = await dbContext.Bugs.findOne({ _id: id }).populate('creator', 'name picture')
     if (!data) {
       throw new BadRequest('Invalid Id')
     }
@@ -23,7 +23,7 @@ class BugsService {
   }
 
   async edit(body) {
-    const data = await dbContext.Bugs.findOneAndUpdate({ _id: body.id }, body, { new: true })
+    const data = await dbContext.Bugs.findOneAndUpdate({ _id: body.id }, body, { new: false })
     if (!data) {
       throw new BadRequest('Invalid Id')
     }
