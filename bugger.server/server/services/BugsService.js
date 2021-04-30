@@ -15,7 +15,7 @@ class BugsService {
   }
 
   async findNotesByBug(id) {
-    return await dbContext.Notes.find({ bugId: id }) // NOTE .populate('creator', 'name', etc)
+    return await dbContext.Notes.find({ bugId: id })
   }
 
   async create(body) {
@@ -23,7 +23,11 @@ class BugsService {
   }
 
   async edit(body) {
-    const data = await dbContext.Bugs.findOneAndUpdate({ _id: body.id }, body, { new: false })
+    const bugBoi = await dbContext.Bugs.findOne({ _id: body.id })
+    if (bugBoi.closed === true) {
+      throw new BadRequest('Bug is Closed')
+    }
+    const data = await dbContext.Bugs.findOneAndUpdate({ _id: body.id, creatorId: body.creatorId }, body, { new: true })
     if (!data) {
       throw new BadRequest('Invalid Id')
     }
@@ -31,7 +35,11 @@ class BugsService {
   }
 
   async delete(id, creatorId) {
-    const data = await dbContext.Bugs.findOneAndDelete({ _id: id, creatorId })
+    const closedBug = await dbContext.Bugs.findOne({ _id: id })
+    if (closedBug.closed === true) {
+      throw new BadRequest('Nope')
+    }
+    const data = await dbContext.Bugs.findOneAndUpdate({ _id: id, creatorId }, { closed: true })
     if (!data) {
       throw new BadRequest('Invalid Id')
     }
