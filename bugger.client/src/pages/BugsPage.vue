@@ -1,12 +1,10 @@
 <template>
   <div class="bug-page container">
-    <div class="row justify-content-left mb-2">
-      <div class="col-4">
-        <h2>Curent Bugs</h2>
-        <button type="button" class="btn- btn-lg -btn-dark mt-3 mb-2" @click="createBug()" title="Report Bug">
-          REPORT BUG
-        </button>
-      </div>
+    <div class="row justify-content-left my-4">
+      <h2>Curent Bugs</h2>
+      <button type="button" class="btn- btn-lg btn-dark mx-3" @click="createBug()" title="Report Bug">
+        REPORT BUG
+      </button>
     </div>
     <div class="row">
     </div>
