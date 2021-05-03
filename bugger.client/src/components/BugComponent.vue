@@ -14,9 +14,7 @@
             <span v-if="bug.closed" class="text-danger"> Closed </span>
             <span v-else class="text-success"> Open </span>
           </div>
-          <!-- <div>
-            {{ new Date (bug.updatedAt).toLocalString( time) }}
-          </div> -->
+          <td>{{ new Date (bug.updatedAt).toLocaleString(time) }}</td>
         </div>
       </div>
     </router-link>
@@ -45,6 +43,14 @@ export default {
     return {
       state,
       route,
+      time: {
+        year: '2-digit',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      },
       async closeBug(id) {
         if (await Notification.confirmAction()) {
           try {
