@@ -15,9 +15,9 @@
             <span v-if="bug.closed" class="text-danger"> Closed </span>
             <span v-else class="text-success"> Open </span>
           </div>
-          <div>
-            {{ new Date (bug.updatedAt).toLocalString(en, time) }}
-          </div>
+          <!-- <div>
+            {{ new Date (bug.updatedAt).toLocalString( time) }}
+          </div> -->
         </div>
       </div>
     </router-link>

@@ -10,7 +10,7 @@
       </button>
     </div>
     <div class="row" v-if="state.bugs[0]">
-      <BugComponent v-for="b in state.bugs" :key="b.id" :bug="bug" />
+      <BugComponent v-for="b in state.bugs" :key="b.id" :bug="b" />
     </div>
   </div>
 </template>
