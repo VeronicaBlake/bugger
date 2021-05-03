@@ -14,6 +14,14 @@ class BugsService {
     }
   }
 
+  async hideClosedBugs() {
+    if (document.getElementById('filter-box').checked) {
+      AppState.bugs = AppState.bugs.filter(bug => bug.closed !== true)
+    } else {
+      this.getAllBugs()
+    }
+  }
+
   async getActiveBug(bugId) {
     try {
       const res = await api.get(`api/bugs/${bugId}`)

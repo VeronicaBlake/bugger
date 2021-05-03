@@ -18,6 +18,17 @@
       </button>
       <CreateBugModal />
     </div>
+    <div class="col-md-6 d-flex justify-content-end align-items-end">
+      <span>Hide Closed Bugs
+        <input type="checkbox"
+               class="filter-checkbox cursor-pointer"
+               id="filter-box"
+               name="filter-box"
+               title="Hide Closed Bugs"
+               @click="hideClosed"
+        >
+      </span>
+    </div>
     <div class="row justify-content-center" v-if="state.bugs[0]">
       <BugComponent v-for="b in state.bugs" :key="b.id" :bug="b" />
     </div>
@@ -53,14 +64,13 @@ export default {
     })
     return {
       state,
-      // route,
-      // async createBug() {
-      //   try {
-      //     await bugsService.createBug(AppState.newPost)
-      //   } catch (error) {
-      //     Notification.toast('Cancelled', 'warning')
-      //   }
-      // },
+      async hideClosed(bugs) {
+        try {
+          await bugsService.hideClosedBugs(bugs)
+        } catch (error) {
+          Notification.toast('Error: ' + error, ' error')
+        }
+      },
       async sortByStatus(bugs) {
         try {
           await bugsService.sortByStatus(bugs)
