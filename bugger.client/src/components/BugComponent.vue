@@ -1,6 +1,5 @@
 <template>
   <div class="bugs-component">
-    <h1>Hello</h1>
     <router-link :to="{ name: 'BugsDetails', params:{id:bug.id} }" title="View Bug Details">
       <div class="card justify-content-around">
         <div class="card-body">

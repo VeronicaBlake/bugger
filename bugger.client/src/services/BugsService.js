@@ -29,9 +29,8 @@ class BugsService {
     AppState.notes[bugId] = res.data
   }
 
-  async createBug(data) {
-    const res = await api.post('api/bugs', data)
-    AppState.bugs.push(res.data)
+  async createBug(body) {
+    const res = await api.post('api/bugs', body)
     router.push({ name: 'Bug', params: { id: res.data.id } })
     this.getAllBugs()
   }
