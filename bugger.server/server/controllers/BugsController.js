@@ -6,11 +6,11 @@ export class BugsController extends BaseController {
   constructor() {
     super('api/bugs')
     this.router
-      .use(Auth0Provider.getAuthorizedUserInfo)
-      // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
+    // NOTE: Beyond this point all routes require Authorization tokens (the user must be logged in)
       .get('', this.getAllBugs)
       .get('/:id', this.getBugById)
       .get('/:id/notes', this.getNotesByBugId)
+      .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.createBug)
       .put('/:id', this.editBug)
       .delete('/:id', this.deleteBug)
@@ -18,7 +18,7 @@ export class BugsController extends BaseController {
 
   async getAllBugs(req, res, next) {
     try {
-      const bugs = await bugsService.find({ ...req.query })
+      const bugs = await bugsService.find(req.query)
       return res.send(bugs)
     } catch (error) {
       next(error)

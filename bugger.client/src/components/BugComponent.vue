@@ -1,7 +1,7 @@
 <template>
   <div class="bugs-component">
     <h1>Hello</h1>
-    <router-link :to="{ name: 'BugDetailsPage', params:{id:bug.id} }" title="View Bug Details">
+    <router-link :to="{ name: 'BugsDetails', params:{id:bug.id} }" title="View Bug Details">
       <div class="card justify-content-around">
         <div class="card-body">
           <div class="div flexCol">
@@ -25,8 +25,13 @@
 </template>
 
 <script>
+import { bugsService } from '../services/BugsService'
+import { AppState } from '../AppState'
+import Notification from '../utils/Notification'
+import { computed, reactive } from 'vue'
+import { useRoute } from 'vue-router'
 export default {
-  name: 'BugsComponent',
+  name: 'BugComponent',
   props: {
     bug: {
       type: Object,
@@ -34,15 +39,24 @@ export default {
     }
   },
   setup() {
+    const route = useRoute()
+    const state = reactive({
+      account: computed(() => AppState.account)
+    })
     return {
-      time: {
-        year: '2-digit',
-        month: '2-digit',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit'
-
+      state,
+      route,
+      async closeBug(id) {
+        if (await Notification.confirmAction()) {
+          try {
+            await bugsService.closeBug(id)
+            Notification.toast('Closed! ', 'error')
+          } catch (error) {
+            Notification.toast('Input canceled!', 'warning')
+          }
+        } else {
+          Notification.toast('No worries!', 'success')
+        }
       }
     }
   },

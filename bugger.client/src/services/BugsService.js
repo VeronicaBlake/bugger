@@ -8,6 +8,7 @@ class BugsService {
     try {
       const res = await api.get('api/bugs')
       AppState.bugs = res.data
+      // console.log(res.data)
     } catch (error) {
       Notification.toast('ERROR LOADING BUGS')
     }

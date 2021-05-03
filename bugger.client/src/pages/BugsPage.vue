@@ -9,8 +9,8 @@
         REPORT NEW BUG
       </button>
     </div>
-    <div class="row" v-if="state.bugs[0] !=null">
-      <BugsComponent v-for="b in state.bugs" :key="b.id" :bug-prop="b" />
+    <div class="row" v-if="state.bugs[0]">
+      <BugComponent v-for="b in state.bugs" :key="b.id" :bug="bug" />
     </div>
   </div>
 </template>
