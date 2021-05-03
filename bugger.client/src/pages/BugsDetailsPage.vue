@@ -1,63 +1,129 @@
+
 <template>
-  <div class="bug-details container">
-    <h1>Hello from bugsDetails!</h1>
-    <div class="row">
+  <div class="home bug-detail container-fluid" v-if="state.activeBug">
+    <div class="row mx-1 my-1 justify-content-between">
+      <div class="col-md-4">
+        <div>
+          <h3>{{ state.activeBug.title }}</h3>
+        </div>
+      </div>
+      <div class="col-md-3 d-flex">
+        <div v-if="state.activeBug.closed"></div>
+        <div v-else>
+          <button class="btn btn-outline-danger">
+            Close This Bug
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mx-1 my-1 justify-content-between">
+      <div class="col-md-6 d-flex flex-row">
+        <p class="font-weight-lighter">
+          Reported by: <img :src="state.activeBug.creator.picture" height="30" alt="" class="user-photo rounded-circle mx-2"><b> {{ state.activeBug.creator.name }}</b>
+        </p>
+      </div>
+      <div class="col-md-3">
+        <h4 class="font-weight-lighter">
+          Status:
+          <span v-if="state.activeBug.closed" class="font-weight-bold text-danger">Closed</span>
+          <span v-else class="text-success font-weight-bold">Open</span>
+        </h4>
+      </div>
+    </div>
+
+    <div class="row mx-1 my-1">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-body">
+            {{ state.activeBug.description }}
+          </div>
+        </div><p class="text-black-50 mb-0 mb-1 ml-1">
+          {{ state.activeBug.title }} Description:
+        </p>
+      </div>
+    </div>
+
+    <div class="row mx-1 mt-4 align-items-center">
+      <div class="col-md-12">
+        <h5>Notes</h5>
+
+        <button class="btn btn-outline-primary"
+                title="Add Note"
+                data-toggle="collapse"
+                data-target="#new-note"
+                v-if="state.user.isAuthenticated"
+        >
+          Add Note
+        </button>
+        <div class="collapse w-100" id="new-note">
+          <div class="card card-body bg-transparent mt-2 text-left">
+            <CreateNoteModal />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mx-1">
+      <div class="col-md-12 mt-2">
+        <table class="table table-hover table-dark">
+          <caption>{{ state.activeBug.title }}'s Notes</caption>
+          <thead>
+            <tr>
+              <th scope="col">
+                Name
+              </th>
+              <th scope="col">
+                Message
+              </th>
+              <th scope="col">
+                Delete
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Inject Note Component here. -->
+            <NoteComponent v-for="note in state.notes" :key="note.id" :note="note" />
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { computed, onMounted, reactive } from 'vue'
+import { computed, reactive, onMounted } from 'vue'
 import { AppState } from '../AppState'
-import { useRoute } from 'vue-router'
+import Notification from '../utils/Notification'
 import { bugsService } from '../services/BugsService'
 import { notesService } from '../services/NotesService'
-import Notification from '../utils/Notification'
+import { useRoute } from 'vue-router'
 export default {
-  name: 'BugsDetails',
+  name: 'BugsDetailsPage',
   setup() {
     const route = useRoute()
     const state = reactive({
-      bugId: route.params.id,
-      loading: true,
-      newNote: {},
-      notes: computed(() => AppState.notes[state.bugId]),
-      activeBug: computed(() => AppState.activeBug)
+      activeBug: computed(() => AppState.activeBug),
+      account: computed(() => AppState.account),
+      user: computed(() => AppState.user),
+      notes: computed(() => AppState.notes)
     })
     onMounted(async() => {
       try {
-        await bugsService.getNotesByBugId(state.bugId)
-        state.loading = false
+        await bugsService.getActiveBug(route.params.id)
+        await notesService.getNotesByBugId(route.params.id)
       } catch (error) {
-        Notification.toast('Error: ', error, 'error')
-      }
-      try {
-        await bugsService.getBugById(state.bugId)
-      } catch (error) {
-        Notification.toast('Error: ', error, 'error')
+        Notification.toast('error:' + error, 'warning')
       }
     })
     return {
       state,
-      async createNote() {
-        try {
-          await Notification.inputModal('Name your Note!', 'Note name here...')
-          if (AppState.newPost.length > 20) {
-            Notification.toast(`That's ${AppState.newPost.length - 20} too many characters!`, 'error')
-          } else {
-            AppState.newPost.bugId = state.bugId
-            await notesService.createNote(state.bugId, AppState.newPost)
-          }
-        } catch (error) {
-          Notification.toast('Error: ', error, 'error')
-        }
-      },
-      user: computed(() => AppState.user)
+      route
     }
-  }
+  },
+  components: {}
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>

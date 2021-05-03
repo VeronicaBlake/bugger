@@ -33,13 +33,12 @@ class BugsService {
 
   async getNotesByBugId(bugId) {
     const res = await api.get(`api/bugs/${bugId}/notes`)
-    // NOTE you must now specify which specific object in AppState.notes is being referenced.
     AppState.notes[bugId] = res.data
   }
 
   async createBug(body) {
     const res = await api.post('api/bugs', body)
-    router.push({ name: 'Bug', params: { id: res.data.id } })
+    router.push({ name: 'BugsDetailsPage', params: { id: res.data.id } })
     this.getAllBugs()
   }
 

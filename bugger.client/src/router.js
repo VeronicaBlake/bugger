@@ -22,7 +22,7 @@ const routes = [
   },
   {
     path: '/bugs/:id',
-    name: 'BugsDetails',
+    name: 'BugsDetailsPage',
     component: loadPage('BugsDetailsPage')
   },
   {

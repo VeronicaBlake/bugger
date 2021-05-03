@@ -1,6 +1,6 @@
 <template>
   <div class="bugs-component">
-    <router-link :to="{ name: 'BugsDetails', params:{id:bug.id} }" title="View Bug Details">
+    <router-link :to="{ name: 'BugsDetailsPage', params:{id:bug.id} }" title="View Bug Details">
       <div class="card justify-content-around">
         <div class="card-body">
           <div class="div flexCol">
@@ -15,7 +15,7 @@
             <span v-else class="text-success"> Open </span>
           </div>
           <span>{{ new Date (bug.updatedAt).toLocaleString(time) }}</span>
-          <router-link :to="{ name: 'BugsDetails', params: { id: bug.id } }">
+          <router-link :to="{ name: 'BugsDetailsPage', params: { id: bug.id } }">
             <div title="This Bug's Details Page">
               View Details
             </div>
