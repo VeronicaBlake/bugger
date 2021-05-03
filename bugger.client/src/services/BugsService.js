@@ -1,16 +1,25 @@
 import { AppState } from '../AppState'
 import router from '../router'
 import { api } from './AxiosService'
+import Notification from '../utils/Notification'
 
 class BugsService {
   async getAllBugs() {
-    const res = await api.get('api/bugs')
-    AppState.bugs = res.data
+    try {
+      const res = await api.get('api/bugs')
+      AppState.bugs = res.data
+    } catch (error) {
+      Notification.toast('ERROR LOADING BUGS')
+    }
   }
 
-  async getBugById(id) {
-    const res = await api.get(`api/bugs/${id}`)
-    AppState.activeBug = res.data
+  async getActiveBug(bugId) {
+    try {
+      const res = await api.get(`api/bugs/${bugId}`)
+      AppState.activeBug = res.data
+    } catch (error) {
+      Notification.toast('ERROR LOADING BUG')
+    }
   }
 
   async getNotesByBugId(bugId) {
@@ -23,6 +32,7 @@ class BugsService {
     const res = await api.post('api/bugs', data)
     AppState.bugs.push(res.data)
     router.push({ name: 'Bug', params: { id: res.data.id } })
+    this.getAllBugs()
   }
 
   async editBug(bugId, edit) {
@@ -30,9 +40,13 @@ class BugsService {
     await this.getAllBugs()
   }
 
-  async deleteBug(bugId) {
+  async closeBug(activeBug, bugId) {
     await api.delete(`api/bugs/${bugId}`)
-    await this.getAllBugs()
+    if (activeBug.closed === false) {
+      AppState.activeBug.closed = true
+    } else {
+      Notification.toast('BUG CLOSED')
+    }
   }
 }
 

@@ -1,12 +1,16 @@
 <template>
   <div class="bug-page container">
-    <div class="row justify-content-left my-4">
-      <h2>Curent Bugs</h2>
-      <button type="button" class="btn- btn-lg btn-dark mx-3" @click="createBug()" title="Report Bug">
-        REPORT BUG
+    <div class="row justify-content-left my-4" v-if="state.loading">
+      <div class="col-12 text-center p-3 m-md4 my-md-3 my-4">
+        <i class="fas fa-bug fa-spin text-success large-icon mx-1"></i>
+      </div>
+      <h2>Curent Bugs:</h2>
+      <button type="button" class="btn- btn-lg btn-dark mx-3" @click="createBug()" title="Report Bug" v-if="state.user.isAuthenticated">
+        REPORT NEW BUG
       </button>
     </div>
-    <div class="row">
+    <div class="row" v-if="state.bugs[0] !=null">
+      <BugsComponent v-for="b in state.bugs" :key="b.id" :bug-prop="b" />
     </div>
   </div>
 </template>
@@ -14,45 +18,35 @@
 <script>
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
-import { useRoute } from 'vue-router'
 import { bugsService } from '../services/BugsService'
-import { notesService } from '../services/NotesService'
 import Notification from '../utils/Notification'
+import { useRoute } from 'vue-router'
 export default {
   name: 'Bug',
   setup() {
     const route = useRoute()
     const state = reactive({
-      bugId: route.params.id,
       loading: true,
-      newNote: {},
-      notes: computed(() => AppState.notes[state.bugId]),
-      activeBug: computed(() => AppState.activeBug)
+      bugs: computed(() => AppState.bugs),
+      newBug: computed(() => AppState.newBug),
+      account: computed(() => AppState.account),
+      user: computed(() => AppState.user)
     })
+    // notes don't show on this page, only all bugs. We only need a getAllBugs funtion
     onMounted(async() => {
       try {
-        await bugsService.getNotesByBugId(state.bugId)
-        state.loading = false
-      } catch (error) {
-        Notification.toast('Error: ', error, 'error')
-      }
-      try {
-        await bugsService.getBugById(state.bugId)
+        await bugsService.getAllBugs()
+        state.loading = true
       } catch (error) {
         Notification.toast('Error: ', error, 'error')
       }
     })
     return {
       state,
-      async createNote() {
+      route,
+      async sortByStatus(bugs) {
         try {
-          await Notification.inputModal('Name your Note!', 'Note name here...')
-          if (AppState.newPost.length > 20) {
-            Notification.toast(`That's ${AppState.newPost.length - 20} too many characters!`, 'error')
-          } else {
-            AppState.newPost.bugId = state.bugId
-            await notesService.createNote(state.bugId, AppState.newPost)
-          }
+          await bugsService.sortByStatus(bugs)
         } catch (error) {
           Notification.toast('Error: ', error, 'error')
         }
