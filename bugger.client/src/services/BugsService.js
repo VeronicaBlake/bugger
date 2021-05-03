@@ -14,7 +14,7 @@ class BugsService {
     }
   }
 
-  async hideClosedBugs() {
+  async hideClosed() {
     if (document.getElementById('filter-box').checked) {
       AppState.bugs = AppState.bugs.filter(bug => bug.closed !== true)
     } else {

@@ -1,5 +1,6 @@
 <template>
   <div class="bug-details container">
+    <h1>Hello from bugsDetails!</h1>
     <div class="row">
     </div>
   </div>

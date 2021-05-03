@@ -14,7 +14,12 @@
             <span v-if="bug.closed" class="text-danger"> Closed </span>
             <span v-else class="text-success"> Open </span>
           </div>
-          <td>{{ new Date (bug.updatedAt).toLocaleString(time) }}</td>
+          <span>{{ new Date (bug.updatedAt).toLocaleString(time) }}</span>
+          <router-link :to="{ name: 'BugsDetails', params: { id: bug.id } }">
+            <div title="This Bug's Details Page">
+              View Details
+            </div>
+          </router-link>
         </div>
       </div>
     </router-link>

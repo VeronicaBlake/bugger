@@ -40,13 +40,11 @@ import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { bugsService } from '../services/BugsService'
 import Notification from '../utils/Notification'
-// import { useRoute } from 'vue-router'
 import CreateBugModal from '../components/CreateBugModal.vue'
 export default {
   components: { CreateBugModal },
   name: 'Bug',
   setup() {
-    // const route = useRoute()
     const state = reactive({
       loading: true,
       bugs: computed(() => AppState.bugs),
@@ -66,7 +64,7 @@ export default {
       state,
       async hideClosed(bugs) {
         try {
-          await bugsService.hideClosedBugs(bugs)
+          await bugsService.hideClosed(bugs)
         } catch (error) {
           Notification.toast('Error: ' + error, ' error')
         }
