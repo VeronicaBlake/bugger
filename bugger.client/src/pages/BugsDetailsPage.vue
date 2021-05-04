@@ -43,7 +43,7 @@
       </div>
     </div>
 
-    <div class="row mx-1 mt-4 align-items-center">
+    <div class="row mx-1 mt-4 align-items-center" v-if="state.notes">
       <div class="col-md-12">
         <h5>Notes</h5>
         <button class="btn btn-outline-primary"
@@ -51,6 +51,7 @@
                 data-toggle="modal"
                 data-target="#new-note-form"
                 v-if="state.user.isAuthenticated"
+                type="button"
         >
           Add Note
         </button>
@@ -90,6 +91,7 @@ import { computed, reactive, onMounted } from 'vue'
 import { AppState } from '../AppState'
 import Notification from '../utils/Notification'
 import { bugsService } from '../services/BugsService'
+import { notesService } from '../services/NotesService'
 import { useRoute } from 'vue-router'
 export default {
   name: 'BugsDetailsPage',
@@ -104,7 +106,7 @@ export default {
     onMounted(async() => {
       try {
         await bugsService.getActiveBug(route.params.id)
-        await bugsService.getNotesByBugId(route.params.id)
+        await notesService.getNotesByBugId(route.params.id)
       } catch (error) {
         Notification.toast('error:' + error, 'warning')
       }

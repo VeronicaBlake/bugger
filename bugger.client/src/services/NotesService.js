@@ -1,18 +1,15 @@
-
+import { AppState } from '../AppState'
 import { api } from './AxiosService'
 class NotesService {
-//   async getAllNotes() {
-//     try {
-//       const res = await api.get('api/bugs')
-//       AppState.bugs = res.data
-//     } catch (error) {
-//       Notification.toast('ERROR LOADING BUGS')
-//     }
-//   }
+  async getNotesByBugId(bugId) {
+    const res = await api.get(`api/bugs/${bugId}/notes`)
+    AppState.notes = res.data
+    console.log(res.data)
+  }
 
   async createNote(newNote, id) {
     await api.post('api/notes/', newNote)
-    this.getAllNotes(id)
+    this.getNotesByBugId(id)
   }
 
 //   async deleteNote(activeNote, bugId) {

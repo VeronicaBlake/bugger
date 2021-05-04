@@ -17,7 +17,7 @@ export class NotesController extends BaseController {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorId = req.userInfo.id
       const note = await notesService.create(req.body)
-      return res.send(note)
+      res.send(note)
     } catch (error) {
       next(error)
     }
@@ -27,6 +27,15 @@ export class NotesController extends BaseController {
     try {
       const data = await notesService.delete(req.params.id, req.userInfo.id)
       return res.send(data)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getNotesByBugId(req, res, next) {
+    try {
+      const notes = await notesService.getNotesByBugId(req.params.id)
+      res.send(notes)
     } catch (error) {
       next(error)
     }

@@ -14,10 +14,6 @@ class BugsService {
     return data
   }
 
-  async findNotesByBug(id) {
-    return await dbContext.Notes.find({ bugId: id }).populate('creator', 'name picture')
-  }
-
   async create(body) {
     return await dbContext.Bugs.create(body)
   }

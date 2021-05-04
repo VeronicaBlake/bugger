@@ -54,17 +54,19 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
-import { bugsService } from '../services/NotesService'
+import { computed, reactive } from 'vue'
+import { notesService } from '../services/NotesService'
 import $ from 'jquery'
 import Notification from '../utils/Notification'
 import { useRoute } from 'vue-router'
+import { AppState } from '../AppState'
 export default {
   name: 'CreateNoteModal',
   setup() {
     const route = useRoute()
     const state = reactive({
-      newNote: {}
+      newNote: {},
+      notes: computed(() => AppState.notes)
     })
     return {
       state,
@@ -73,7 +75,7 @@ export default {
         try {
           state.newNote.bug = route.params.id
           // notesService or bugService in the back end for this function?
-          await bugsService.createNote(state.newNote, route.params.id)
+          await notesService.createNote(state.newNote, route.params.id)
           state.newNote = {}
           $('#new-note-form').modal('hide')
           Notification.toast('Note Added!', 'success')

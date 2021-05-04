@@ -1,5 +1,6 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import { bugsService } from '../services/BugsService'
+import { notesService } from '../services/NotesService'
 import BaseController from '../utils/BaseController'
 
 export class BugsController extends BaseController {
@@ -36,8 +37,8 @@ export class BugsController extends BaseController {
 
   async getNotesByBugId(req, res, next) {
     try {
-      const notes = await bugsService.findNotesByBug(req.params.id)
-      return res.send(notes)
+      const notes = await notesService.getNotesByBugId(req.params.id)
+      res.send(notes)
     } catch (error) {
       next(error)
     }
@@ -48,7 +49,7 @@ export class BugsController extends BaseController {
       // NOTE NEVER TRUST THE CLIENT TO ADD THE CREATOR ID
       req.body.creatorId = req.userInfo.id
       const bug = await bugsService.create(req.body)
-      return res.send(bug)
+      res.send(bug)
     } catch (error) {
       next(error)
     }

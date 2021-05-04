@@ -13,5 +13,10 @@ class NotesService {
     }
     return 'Successfully Deleted'
   }
+
+  async getNotesByBugId(id) {
+    const notes = await dbContext.Notes.find({ bug: id }).populate('creator', 'name picture')
+    return notes
+  }
 }
 export const notesService = new NotesService()
