@@ -7,7 +7,7 @@
       </p>
     </th>
     <td>{{ note.body }}</td>
-    <td><i class="fas fa-sm fa-trash" v-if="state.user.isAuthenticated && state.account.id == note.creatorId"></i></td>
+    <td><i class="fas fa-sm fa-trash text-warning" title="Delete this note" v-if="state.user.isAuthenticated && state.account.id == note.creatorId"></i></td>
   </tr>
 </template>
 

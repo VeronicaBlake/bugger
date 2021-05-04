@@ -1,33 +1,33 @@
 <template>
   <div class="home bug-detail container-fluid" v-if="state.activeBug">
     <div class="row mx-1 my-1 justify-content-between">
-      <div class="col-md-4">
+      <div class="col-md-6">
         <div>
-          <h3>{{ state.activeBug.title }}</h3>
+          <h1>{{ state.activeBug.title }}</h1>
         </div>
       </div>
       <div class="col-md-3 d-flex">
-        <div v-if="state.activeBug.closed === false"></div>
-        <div v-else>
-          <button v-if="state.user.isAuthenticated && state.account.id == state.activeBug.creatorId" class="btn btn-outline-danger">
-            Close This Bug
-          </button>
-        </div>
+        <h2 class="font-weight-lighter">
+          Status:
+          <span v-if="state.activeBug.closed" class="font-weight-bold text-danger">Closed</span>
+          <span v-else class="text-success font-weight-bold">Open</span>
+        </h2>
       </div>
     </div>
 
     <div class="row mx-1 my-1 justify-content-between">
-      <div class="col-md-6 d-flex flex-row">
+      <div class="col-md-4 d-flex flex-row">
         <p class="font-weight-lighter">
           Reported by: <img :src="state.activeBug.creator.picture" height="30" alt="" class="user-photo rounded-circle mx-2"><b> {{ state.activeBug.creator.name }}</b>
         </p>
       </div>
       <div class="col-md-3">
-        <h4 class="font-weight-lighter">
-          Status:
-          <span v-if="state.activeBug.closed" class="font-weight-bold text-danger">Closed</span>
-          <span v-else class="text-success font-weight-bold">Open</span>
-        </h4>
+        <div v-if="state.activeBug.closed"></div>
+        <div v-else>
+          <button v-if="state.user.isAuthenticated && state.account.id == state.activeBug.creatorId" class="btn btn-danger">
+            Close Bug
+          </button>
+        </div>
       </div>
     </div>
 
@@ -61,8 +61,7 @@
 
     <div class="row mx-1">
       <div class="col-md-12 mt-2">
-        <table class="table table-hover table-dark">
-          <caption>{{ state.activeBug.title }}'s Notes</caption>
+        <table class="table table-hover tableColor">
           <thead>
             <tr>
               <th scope="col">
@@ -121,4 +120,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.tableColor{
+  background-color:rgb(255, 255, 255)
+}
 </style>
