@@ -10,15 +10,15 @@ export default class Notification {
  * -----------------------------------
  * {@link https://sweetalert2.github.io/#configuration|Check out Sweet Alerts}
  */
-  static async confirmAction(title = 'Are you sure?', text = "You won't be able to revert this!", icon = 'warning', confirmButtonText = 'Yes, delete it!') {
+  static async confirmAction(title = 'Are you sure?', text = "You won't be able to undo this!", icon = 'warning', confirmButtonText = 'Yes!') {
     try {
       const res = await Swal.fire({
         title: title,
         text: text,
         icon: icon,
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
+        confirmButtonColor: '#27AE60',
+        cancelButtonColor: '#D4382D',
         confirmButtonText: confirmButtonText
       })
       if (res.isConfirmed) {

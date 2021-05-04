@@ -1,20 +1,27 @@
 <template>
-  <tr>
-    <th scope="row">
-      {{ bug.title }}
-    </th>
-    <td>{{ bug.creator.name }}</td>
-    <td>
-      <span v-if="bug.closed" class="text-danger">Closed</span>
-      <span v-else class="text-success">Open</span>
-    </td>
-    <td>{{ new Date (bug.updatedAt).toLocaleString(time) }}</td>
-    <router-link :to="{ name: 'BugsDetailsPage', params: { id: bug.id } }">
-      <td title="View Bug Details">
-        View Details
-      </td>
-    </router-link>
-  </tr>
+  <div class="bugs-component">
+    <div class="card justify-content-around m-3 shadow">
+      <div class="card-body justify-content-center">
+        <h3>
+          {{ bug.title }}
+        </h3>
+        <span>
+          <img class="rounded-circle playNice" :src="bug.creator.picture" alt="Bug Creator Profile Picture">
+          {{ bug.creator.name }}
+        </span>
+        <div class="div flexCol">
+          <span v-if="bug.closed" class="text-danger"> Closed </span>
+          <span v-else class="text-success"> Open </span>
+        </div>
+        <span>Last edited: {{ new Date (bug.updatedAt).toLocaleString(time) }}</span>
+        <div>
+          <router-link :to="{ name: 'BugsDetailsPage', params:{id:bug.id} }" title="View Bug Details">
+            View Details
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -67,5 +74,8 @@ export default {
 </script>
 
 <style scoped>
-
+.playNice{
+  max-height: 3rem;
+  max-width: 3rem;
+}
 </style>
