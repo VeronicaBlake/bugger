@@ -33,7 +33,7 @@ class BugsService {
 
   async getNotesByBugId(bugId) {
     const res = await api.get(`api/bugs/${bugId}/notes`)
-    AppState.notes[bugId] = res.data
+    AppState.notes = res.data
   }
 
   async createBug(body) {

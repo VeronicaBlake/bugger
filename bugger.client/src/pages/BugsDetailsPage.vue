@@ -1,4 +1,3 @@
-
 <template>
   <div class="home bug-detail container-fluid" v-if="state.activeBug">
     <div class="row mx-1 my-1 justify-content-between">
@@ -8,9 +7,9 @@
         </div>
       </div>
       <div class="col-md-3 d-flex">
-        <div v-if="state.activeBug.closed"></div>
+        <div v-if="state.activeBug.closed === false"></div>
         <div v-else>
-          <button class="btn btn-outline-danger">
+          <button v-if="state.user.isAuthenticated && state.account.id == state.activeBug.creatorId" class="btn btn-outline-danger">
             Close This Bug
           </button>
         </div>
@@ -34,33 +33,28 @@
 
     <div class="row mx-1 my-1">
       <div class="col-md-12">
-        <div class="card">
-          <div class="card-body">
-            {{ state.activeBug.description }}
-          </div>
-        </div><p class="text-black-50 mb-0 mb-1 ml-1">
-          {{ state.activeBug.title }} Description:
-        </p>
+      </div><p class="text-black-50 mb-0 mb-1 ml-1">
+        {{ state.activeBug.title }} Description:
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        {{ state.activeBug.description }}
       </div>
     </div>
 
     <div class="row mx-1 mt-4 align-items-center">
       <div class="col-md-12">
         <h5>Notes</h5>
-
         <button class="btn btn-outline-primary"
                 title="Add Note"
-                data-toggle="collapse"
-                data-target="#new-note"
+                data-toggle="modal"
+                data-target="#new-note-form"
                 v-if="state.user.isAuthenticated"
         >
           Add Note
         </button>
-        <div class="collapse w-100" id="new-note">
-          <div class="card card-body bg-transparent mt-2 text-left">
-            <CreateNoteModal />
-          </div>
-        </div>
+        <CreateNoteModal />
       </div>
     </div>
 
@@ -96,7 +90,6 @@ import { computed, reactive, onMounted } from 'vue'
 import { AppState } from '../AppState'
 import Notification from '../utils/Notification'
 import { bugsService } from '../services/BugsService'
-import { notesService } from '../services/NotesService'
 import { useRoute } from 'vue-router'
 export default {
   name: 'BugsDetailsPage',
@@ -111,7 +104,7 @@ export default {
     onMounted(async() => {
       try {
         await bugsService.getActiveBug(route.params.id)
-        await notesService.getNotesByBugId(route.params.id)
+        await bugsService.getNotesByBugId(route.params.id)
       } catch (error) {
         Notification.toast('error:' + error, 'warning')
       }
