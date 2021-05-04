@@ -1,29 +1,20 @@
 <template>
-  <div class="bugs-component">
-    <router-link :to="{ name: 'BugsDetailsPage', params:{id:bug.id} }" title="View Bug Details">
-      <div class="card justify-content-around">
-        <div class="card-body">
-          <div class="div flexCol">
-            {{ bug.title }}
-          </div>
-          <div class="div flexCol">
-            <img class="rounded-cirlce" :src="bug.creator.picture" alt="Bug Creator Profile Picture">
-            {{ bug.creator.name }}
-          </div>
-          <div class="div flexCol">
-            <span v-if="bug.closed" class="text-danger"> Closed </span>
-            <span v-else class="text-success"> Open </span>
-          </div>
-          <span>{{ new Date (bug.updatedAt).toLocaleString(time) }}</span>
-          <router-link :to="{ name: 'BugsDetailsPage', params: { id: bug.id } }">
-            <div title="This Bug's Details Page">
-              View Details
-            </div>
-          </router-link>
-        </div>
-      </div>
+  <tr>
+    <th scope="row">
+      {{ bug.title }}
+    </th>
+    <td>{{ bug.creator.name }}</td>
+    <td>
+      <span v-if="bug.closed" class="text-danger">Closed</span>
+      <span v-else class="text-success">Open</span>
+    </td>
+    <td>{{ new Date (bug.updatedAt).toLocaleString(time) }}</td>
+    <router-link :to="{ name: 'BugsDetailsPage', params: { id: bug.id } }">
+      <td title="View Bug Details">
+        View Details
+      </td>
     </router-link>
-  </div>
+  </tr>
 </template>
 
 <script>

@@ -24,8 +24,13 @@
       <div class="col-md-3">
         <div v-if="state.activeBug.closed"></div>
         <div v-else>
-          <button v-if="state.user.isAuthenticated && state.account.id == state.activeBug.creatorId" class="btn btn-danger">
+          <button v-if="state.user.isAuthenticated && state.account.id === state.activeBug.creatorId" class="btn btn-danger mx-2" title="Close Bug" @click="closeBug">
             Close Bug
+          </button>
+          <button v-if="state.activeBug.closed === false && state.account.id == state.activeBug.creatorId" @click="state.edit = true" class="btn btn-warning" title="Edit Bug">
+            Edit Bug
+          </button>
+          <button type="button" class="btn btn-success" v-if="state.edit" title="save changes" @click="saveEdit">
           </button>
         </div>
       </div>
@@ -43,10 +48,12 @@
       </div>
     </div>
 
-    <div class="row mx-1 mt-4 align-items-center" v-if="state.notes">
-      <div class="col-md-12">
+    <div class="row mx-1 mt-4 justify-content-between" v-if="state.notes">
+      <div class="col-md-3">
         <h5>Notes</h5>
-        <button class="btn btn-outline-primary"
+      </div>
+      <span class="col-md-3">
+        <button class="btn btn-success"
                 title="Add Note"
                 data-toggle="modal"
                 data-target="#new-note-form"
@@ -56,7 +63,7 @@
           Add Note
         </button>
         <CreateNoteModal />
-      </div>
+      </span>
     </div>
 
     <div class="row mx-1">
@@ -112,7 +119,17 @@ export default {
     })
     return {
       state,
-      route
+      route,
+      async closeBug() {
+        try {
+          if (await Notification.confirmAction()) {
+            await bugsService.closeBug(state.activeBug, state.activeBug.id)
+            Notification.toast('Bug Closed')
+          }
+        } catch (error) {
+          Notification.toast('Error:', error + 'error')
+        }
+      }
     }
   },
   components: {}

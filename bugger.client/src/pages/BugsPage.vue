@@ -5,30 +5,34 @@
         <i class="fas fa-bug fa-5x fa-spin text-success"></i>
       </div>
     </div>
-    <div class=" my-3">
-      <h2>Curent Bugs:</h2>
-      <button type="button"
-              class="btn- btn-lg btn-dark mx-3"
-              data-toggle="modal"
-              data-target="#new-bug-form"
-              title="Report Bug"
-              v-if="state.user.isAuthenticated"
-      >
-        REPORT NEW BUG
-      </button>
-      <CreateBugModal />
-    </div>
-    <div class="col-md-6 d-flex justify-content-end align-items-end">
-      <span>Hide Closed Bugs
-        <input type="checkbox"
-               class="filter-checkbox cursor-pointer"
-               id="filter-box"
-               name="filter-box"
-               title="Hide Closed Bugs"
-               @click="hideClosed"
+    <span class="row justify-content-center my-3">
+      <div class=" col-md-8">
+        <h2>Curent Bugs:</h2>
+      </div>
+      <span class="col-my-6">
+        <button type="button"
+                class="btn btn-lg btn-dark mx-3"
+                data-toggle="modal"
+                data-target="#new-bug-form"
+                title="Report Bug"
+                v-if="state.user.isAuthenticated"
         >
+          REPORT NEW BUG
+        </button>
+        <CreateBugModal />
       </span>
-    </div>
+      <div class="col-md-6 d-flex justify-content-end align-items-end">
+        <span>Hide Closed Bugs
+          <input type="checkbox"
+                 class="filter-checkbox cursor-pointer"
+                 id="filter-box"
+                 name="filter-box"
+                 title="Hide Closed Bugs"
+                 @click="hideClosed"
+          >
+        </span>
+      </div>
+    </span>
     <div class="row justify-content-center" v-if="state.bugs[0]">
       <BugComponent v-for="b in state.bugs" :key="b.id" :bug="b" />
     </div>

@@ -7,7 +7,7 @@
       </p>
     </th>
     <td>{{ note.body }}</td>
-    <td><i class="fas fa-sm fa-trash text-warning" title="Delete this note" v-if="state.user.isAuthenticated && state.account.id == note.creatorId"></i></td>
+    <td><i class="fas fa-sm fa-trash text-warning" title="Delete this note" @click="deleteNote" v-if="state.user.isAuthenticated && state.account.id === note.creatorId"></i></td>
   </tr>
 </template>
 
@@ -15,6 +15,8 @@
 import { reactive, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { AppState } from '../AppState'
+import Notification from '../utils/Notification'
+import { notesService } from '../services/NotesService'
 export default {
   name: 'NoteComponent',
   props: {
@@ -31,7 +33,17 @@ export default {
     })
     return {
       state,
-      route
+      route,
+      async deleteNote() {
+        try {
+          if (await Notification.confirmAction()) {
+            await notesService.deleteNote(props.note.id, props.note.bug)
+            Notification.toast('Note Deleted')
+          }
+        } catch (error) {
+          Notification.toast('Error:', error + 'error')
+        }
+      }
     }
   },
   components: {}
